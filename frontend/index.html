@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Healthy City Dashboard - Login</title>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+  <h2>Login to Healthy City Dashboard</h2>
+
+  <!-- Google Sign-In button -->
+  <div id="g_id_onload"
+       data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
+       data-context="signin"
+       data-ux_mode="popup"
+       data-callback="handleCredentialResponse"
+       data-auto_prompt="false">
+  </div>
+
+  <div class="g_id_signin"
+       data-type="standard"
+       data-shape="rectangular"
+       data-theme="outline"
+       data-text="signin_with"
+       data-size="large"
+       data-logo_alignment="left">
+  </div>
+
+  <script>
+    async function handleCredentialResponse(response) {
+        const token = response.credential;
+        try {
+            const res = await fetch("http://127.0.0.1:8000/auth/google", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ token })
+            });
+
+            if (!res.ok) throw new Error("Authentication failed");
+            const data = await res.json();
+
+            // Show user info
+            document.body.innerHTML += `
+                <h3>Welcome, ${data.name}</h3>
+                <p>Email: ${data.email}</p>
+                <img src="${data.picture}" width="60"/>
+            `;
+        } catch (err) {
+            console.error("❌ Login failed:", err);
+            alert("Google login failed");
+        }
+    }
+  </script>
+</body>
+</html>

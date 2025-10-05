@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+python-dotenv
+requests
+earthengine-api==0.1.357
+google-api-python-client
+google-auth-httplib2
+google-auth-oauthlib
+numpy
+Pillow
+windows-curses
+
+sqlmodel
+
+ google-auth
